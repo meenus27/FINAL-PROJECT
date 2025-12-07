@@ -50,6 +50,8 @@ if not logger.handlers:
 
 # ---------------- Page config ----------------
 st.set_page_config(layout="wide", page_title="CrowdShield — AI Disaster Copilot", page_icon="🛡️", initial_sidebar_state="expanded")
+center_point = (9.931233, 76.267304)
+G = routing.load_graph(online=True, center_point=center_point, dist=1500)
 
 # ---------------- Responsive CSS ----------------
 st.markdown("", unsafe_allow_html=True)
@@ -681,7 +683,7 @@ with left_col:
 
     try:
         if route_mode == "Shortest":
-            route = routing.find_shortest_route(G, center_point, shelters)
+            route = routing.compute_shortest_path(G, center_point, shelters[0])  # pick first shelter
             if route:
                 folium.PolyLine(route, color="blue", weight=5, tooltip="Shortest Route").add_to(m)
 
@@ -698,9 +700,9 @@ with left_col:
     except Exception as e:
         st.warning(f"Route computation failed: {e}")
 
-    # Render map in Streamlit
     from streamlit_folium import st_folium
     st_folium(m, width=700, height=500)
+
 
 
     try:
