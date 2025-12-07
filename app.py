@@ -60,11 +60,55 @@ Path("data/cache").mkdir(parents=True, exist_ok=True)
 
 # ---------------- I18N ----------------
 I18N = {
-    "en": {"title": "CrowdShield Demo", "state": "Select state", "map": "Safety Map", "drivers": "Drivers", "severity": "Severity Tier", "advisory": "LLM Advisory", "risk_crowd": "Crowd risk", "risk_disaster": "Disaster risk", "recommendations": "Recommendations", "nearest": "Nearest shelter", "eta": "ETA", "distance": "Distance", "instructions": "Route instructions", "safety_methods": "Safety methods", "live_status": "Live Status", "refresh_rate": "Auto-refresh (seconds)", "enable_auto_refresh": "Enable Auto-Refresh", "history": "Risk History", "dispatch": "Authority dispatch", "incident": "Incident", "no_reports": "No recent reports"},
-    "hi": {"title": "क्राउडशील्ड डेमो", "state": "राज्य चुनें", "map": "सुरक्षा मानचित्र"},
-    "ml": {"title": "ക്രൗഡ്‌ഷീൽഡ് ഡെമോ", "state": "സംസ്ഥാനം തിരഞ്ഞെടുക്കുക", "map": "സുരക്ഷാ മാപ്പ്"},
-    "ta": {"title": "கூட்டம் பாதுகாப்பு டெமோ", "state": "மாநிலத்தைத் தேர்ந்தெடுக்கவும்", "map": "பாதுகாப்பு வரைபடம்"},
+    "en": {
+        "title": "CrowdShield Demo",
+        "state": "Select state",
+        "map": "Safety Map",
+        "drivers": "Drivers",
+        "severity": "Severity Tier",
+        "advisory": "LLM Advisory",
+        "risk_crowd": "Crowd risk",
+        "risk_disaster": "Disaster risk",
+        "recommendations": "Recommendations",
+        "nearest": "Nearest shelter",
+        "eta": "ETA",
+        "distance": "Distance",
+        "instructions": "Route instructions",
+        "safety_methods": "Safety methods",
+        "live_status": "Live Status",
+        "refresh_rate": "Auto-refresh (seconds)",
+        "enable_auto_refresh": "Enable Auto-Refresh",
+        "history": "Risk History",
+        "dispatch": "Authority dispatch",
+        "incident": "Incident",
+        "no_reports": "No recent reports"
+    },
+    "hi": {
+        "title": "क्राउडशील्ड डेमो",
+        "state": "राज्य चुनें",
+        "map": "सुरक्षा मानचित्र",
+        "live_status": "लाइव स्थिति",
+        "enable_auto_refresh": "ऑटो-रिफ्रेश सक्षम करें",
+        "refresh_rate": "ऑटो-रिफ्रेश (सेकंड)"
+    },
+    "ml": {
+        "title": "ക്രൗഡ്‌ഷീൽഡ് ഡെമോ",
+        "state": "സംസ്ഥാനം തിരഞ്ഞെടുക്കുക",
+        "map": "സുരക്ഷാ മാപ്പ്",
+        "live_status": "ലൈവ് സ്റ്റാറ്റസ്",
+        "enable_auto_refresh": "ഓട്ടോ-റിഫ്രെഷ് പ്രവർത്തനക്ഷമമാക്കുക",
+        "refresh_rate": "ഓട്ടോ-റിഫ്രെഷ് (സെക്കൻഡ്)"
+    },
+    "ta": {
+        "title": "கூட்டம் பாதுகாப்பு டெமோ",
+        "state": "மாநிலத்தைத் தேர்ந்தெடுக்கவும்",
+        "map": "பாதுகாப்பு வரைபடம்",
+        "live_status": "நேரடி நிலை",
+        "enable_auto_refresh": "ஆட்டோ-ரிப்ரெஷ் இயக்கு",
+        "refresh_rate": "ஆட்டோ-ரிப்ரெஷ் (விநாடிகள்)"
+    }
 }
+
 
 STATES = ["Kerala", "Tamil Nadu", "Karnataka", "Maharashtra", "Uttar Pradesh", "Delhi", "West Bengal", "Rajasthan"]
 STATE_CENTERS = {"Kerala": (10.1632, 76.6413), "Tamil Nadu": (11.1271, 78.6569), "Karnataka": (15.3173, 75.7139), "Maharashtra": (19.7515, 75.7139), "Uttar Pradesh": (26.8467, 80.9462), "Delhi": (28.6139, 77.2090), "West Bengal": (22.9868, 87.8550), "Rajasthan": (27.0238, 74.2179)}
@@ -120,14 +164,14 @@ with col_s1:
         st.session_state.wind_slider = 10
         st.session_state.crowd_density_slider = 8.0
         st.session_state.scenario_trigger_crowd = True
-        st.experimental_rerun()
+        st.rerun()()
 with col_s2:
     if st.button("Coastal flood", key="btn_coastal"):
         st.session_state.rainfall_slider = 180
         st.session_state.wind_slider = 80
         st.session_state.scenario_trigger_flood = True
         st.session_state.crowd_density_slider = 2.0
-        st.experimental_rerun()
+        st.rerun()()
 
 st.sidebar.markdown("### 🎛️ Simulation Controls")
 trigger_flood = st.sidebar.checkbox("🌊 Trigger Flood", value=st.session_state.scenario_trigger_flood)
@@ -227,7 +271,7 @@ if st.session_state.auto_refresh_enabled:
     st.session_state.refresh_interval = st.sidebar.slider(i18n["refresh_rate"], 2, 30, st.session_state.refresh_interval, 1)
 if st.sidebar.button("🔄 Manual Refresh", key="btn_manual_refresh"):
     st.session_state.last_update = datetime.now()
-    st.experimental_rerun()
+    st.rerun()()
 
 st.sidebar.markdown("### 📢 Alerts")
 def send_sms_safe(body):
@@ -281,7 +325,7 @@ if st.session_state.auto_refresh_enabled:
     if time_since_update >= st.session_state.refresh_interval:
         st.session_state.last_update = datetime.now()
         time.sleep(0.05)
-        st.experimental_rerun()
+        st.rerun()()
 
 # ---------------- Data loading ----------------
 haz_path = f"data/hazard_zones_{state.lower().replace(' ', '_')}.geojson"
@@ -623,18 +667,41 @@ st.markdown("---")
 left_col, right_col = st.columns([2, 1])
 
 with left_col:
-    
     st.subheader(i18n["map"])
     center_point = STATE_CENTERS.get(state, (9.931233, 76.267304))
 
-    # Create map
+    # Create base map
     m = folium.Map(location=center_point, zoom_start=12, tiles="OpenStreetMap")
 
-    # Add a marker
-    folium.Marker(location=center_point, tooltip="Center Point").add_to(m)
+    # Add origin marker
+    folium.Marker(location=center_point, tooltip="Origin").add_to(m)
 
-    # Render map
+    # Choose route mode
+    route_mode = st.sidebar.radio("Route Mode", ["Shortest", "Fastest", "Safest"], index=0)
+
+    try:
+        if route_mode == "Shortest":
+            route = routing.find_shortest_route(G, center_point, shelters)
+            if route:
+                folium.PolyLine(route, color="blue", weight=5, tooltip="Shortest Route").add_to(m)
+
+        elif route_mode == "Fastest":
+            route = routing.find_fastest_route(G, center_point, shelters)
+            if route:
+                folium.PolyLine(route, color="green", weight=5, tooltip="Fastest Route").add_to(m)
+
+        elif route_mode == "Safest":
+            route = routing.find_safest_route(G, center_point, shelters, hazards)
+            if route:
+                folium.PolyLine(route, color="red", weight=5, tooltip="Safest Route").add_to(m)
+
+    except Exception as e:
+        st.warning(f"Route computation failed: {e}")
+
+    # Render map in Streamlit
+    from streamlit_folium import st_folium
     st_folium(m, width=700, height=500)
+
 
     try:
         m = ux.create_base_map(center_point=center_point, zoom_start=12)
