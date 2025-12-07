@@ -1,0 +1,12 @@
+rainfall_mm:
+  low: 10
+  medium: 25
+  high: 50
+wind_kph:
+  low: 20
+  medium: 40
+  high: 80
+crowd_density_per_m2:
+  low: 0.5
+  medium: 2
+  high: 4
