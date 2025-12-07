@@ -232,3 +232,4 @@ Provide 2-3 sentences of clear, factual safety guidance. Use neutral, profession
         
         return LOCAL_CACHE.get(severity, f"[Mock Advisory] Severity: {severity}. Drivers: {', '.join(drivers)}")
 
+
